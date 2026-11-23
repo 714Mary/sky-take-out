@@ -58,6 +58,9 @@ public class OrderServiceImpl implements OrderService {
     private UserMapper userMapper;
 
     @Autowired
+    private DishMapper dishMapper;
+
+    @Autowired
     private WeChatPayUtil weChatPayUtil;
 
     @Value("${sky.shop.address}")
@@ -121,6 +124,16 @@ public class OrderServiceImpl implements OrderService {
 
 //        向明细表中查询n条数据
         orderDetailMapper.insertBatch(orderDetailList);
+
+//        扣减菜品库存（库存预警功能）
+        for (ShoppingCart cart : shoppingCartList) {
+            if (cart.getDishId() != null && cart.getNumber() != null) {
+                int rows = dishMapper.updateStock(cart.getDishId(), cart.getNumber());
+                if (rows == 0) {
+                    throw new OrderBusinessException(cart.getName() + " 库存不足，下单失败");
+                }
+            }
+        }
 
 //        清理购物车中的数据
         shoppingCartMapper.deleteByUserId(currentId);
