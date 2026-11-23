@@ -143,6 +143,32 @@ public class DishController {
         return Result.success();
     }
 
+
+
+    /**
+     * 查询库存预警菜品列表
+     * 管理员可以看到哪些菜品库存不足，及时补货
+     */
+    @GetMapping("/lowStockList")
+    @ApiOperation("查询库存预警菜品列表")
+    public Result<List<Dish>> lowStockList() {
+        log.info("查询库存预警菜品列表");
+        List<Dish> list = dishService.getLowStockList();
+        return Result.success(list);
+    }
+
+    /**
+     * 统计库存预警菜品数量
+     * 用于工作台显示"当前有 X 道菜需要补货"
+     */
+    @GetMapping("/lowStockCount")
+    @ApiOperation("统计库存预警菜品数量")
+    public Result<Integer> lowStockCount() {
+        log.info("统计库存预警菜品数量");
+        Integer count = dishService.countLowStock();
+        return Result.success(count);
+    }
+
     /**
      * 清理缓存数据
      * @param pattern
