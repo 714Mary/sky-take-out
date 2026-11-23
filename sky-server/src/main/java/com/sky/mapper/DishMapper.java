@@ -77,4 +77,25 @@ public interface DishMapper {
      * @return
      */
     Integer countByMap(Map map);
+
+    // ========== 库存预警新增方法 ==========
+
+    /**
+     * 扣减库存（下单时调用）
+     * @param dishId 菜品id
+     * @param count  扣减数量
+     * @return 影响行数，0表示库存不足
+     */
+    int updateStock(@Param("dishId") Long dishId, @Param("count") Integer count);
+
+    /**
+     * 查询库存预警的菜品列表（stock <= min_stock）
+     */
+    List<Dish> getLowStockList();
+
+    /**
+     * 统计库存预警菜品数量
+     */
+    Integer countLowStock();
+
 }
