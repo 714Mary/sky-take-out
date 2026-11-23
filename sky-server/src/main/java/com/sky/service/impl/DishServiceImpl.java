@@ -18,6 +18,7 @@ import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
+import com.sky.exception.OrderBusinessException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -225,6 +226,36 @@ public class DishServiceImpl implements DishService {
                     setmealMapper.update(setmeal);
                 }
             }
+        }
+    }
+
+    /**
+     * 查询库存预警菜品列表
+     */
+    @Override
+    public List<Dish> getLowStockList() {
+        return dishMapper.getLowStockList();
+    }
+
+    /**
+     * 统计库存预警菜品数量
+     */
+    @Override
+    public Integer countLowStock() {
+        return dishMapper.countLowStock();
+    }
+
+    /**
+     * 扣减菜品库存（下单时调用）
+     */
+    @Override
+    public void updateStock(Long dishId, Integer count) {
+        int rows = dishMapper.updateStock(dishId, count);
+        if (rows == 0) {
+            Dish dish = dishMapper.getById(dishId);
+            String dishName = dish != null ? dish.getName() : "未知菜品";
+            throw new OrderBusinessException(dishName + " 库存不足，当前库存："
+                    + (dish != null ? dish.getStock() : 0));
         }
     }
 

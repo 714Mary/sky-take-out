@@ -61,4 +61,21 @@ public interface DishService {
      * @param id
      */
     void startOrStop(Integer status, Long id);
+
+    // ========== 库存预警新增接口 ==========
+
+    /**
+     * 查询库存预警菜品列表
+     */
+    List<Dish> getLowStockList();
+
+    /**
+     * 统计库存预警菜品数量
+     */
+    Integer countLowStock();
+
+    /**
+     * 扣减菜品库存（下单时调用）
+     */
+    void updateStock(Long dishId, Integer count);
 }
