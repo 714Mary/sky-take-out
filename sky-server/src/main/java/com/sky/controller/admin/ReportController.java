@@ -19,6 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 
+import com.sky.vo.EmployeePerformanceVO;
+import java.util.List;
+
+
+
+
 /**
  * 报表
  */
@@ -95,5 +101,18 @@ public class ReportController {
     @ApiOperation("导出运营数据报表")
     public void export(HttpServletResponse response){
         reportService.exportBusinessData(response);
+    }
+
+
+    /**
+     * 员工绩效统计（创新点3）
+     */
+    @GetMapping("/employeePerformance")
+    @ApiOperation("员工绩效统计")
+    public Result<List<EmployeePerformanceVO>> employeePerformance(
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
+        log.info("员工绩效统计：{} 至 {}", begin, end);
+        return Result.success(reportService.getEmployeePerformance(begin, end));
     }
 }

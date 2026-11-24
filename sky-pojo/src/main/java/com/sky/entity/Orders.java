@@ -107,4 +107,7 @@ public class Orders implements Serializable {
 
     //餐具数量状态  1按餐量提供  0选择具体数量
     private Integer tablewareStatus;
+
+    //处理订单的员工ID（创新点3：员工绩效统计用）
+    private Long handleUserId;
 }

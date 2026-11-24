@@ -390,6 +390,7 @@ public class OrderServiceImpl implements OrderService {
         Orders orders = Orders.builder()
                 .id(ordersCancelDTO.getId())
                 .status(Orders.CONFIRMED)
+                .handleUserId(BaseContext.getCurrentId())
                 .build();
         orderMapper.update(orders);
     }
@@ -427,6 +428,7 @@ public class OrderServiceImpl implements OrderService {
         orders.setStatus(Orders.CANCELLED);
         orders.setRejectionReason(ordersRejectionDTO.getRejectionReason());
         orders.setCancelTime(LocalDateTime.now());
+        orders.setHandleUserId(BaseContext.getCurrentId());
 
         orderMapper.update(orders);
     }
@@ -459,6 +461,7 @@ public class OrderServiceImpl implements OrderService {
         orders.setStatus(Orders.CANCELLED);
         orders.setCancelReason(ordersCancelDTO.getCancelReason());
         orders.setCancelTime(LocalDateTime.now());
+        orders.setHandleUserId(BaseContext.getCurrentId());
         orderMapper.update(orders);
     }
 
@@ -481,6 +484,7 @@ public class OrderServiceImpl implements OrderService {
 
 //        更新订单状态，状态转为派送中
         orders.setStatus(Orders.DELIVERY_IN_PROGRESS);
+        orders.setHandleUserId(BaseContext.getCurrentId());
 
         orderMapper.update(orders);
     }
@@ -500,11 +504,12 @@ public class OrderServiceImpl implements OrderService {
         }
 
         Orders orders = new Orders();
-        orders.setId(orders.getId());
+        orders.setId(orderDB.getId());
 
 //        更新订单状态，状态转为完成
-        orders.setStatus(Orders.CONFIRMED);
+        orders.setStatus(Orders.COMPLETED);
         orders.setDeliveryTime(LocalDateTime.now());
+        orders.setHandleUserId(BaseContext.getCurrentId());
 
         orderMapper.update(orders);
     }

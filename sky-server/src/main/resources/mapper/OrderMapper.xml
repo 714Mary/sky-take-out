@@ -40,6 +40,10 @@
             <if test="deliveryTime != null">
                 delivery_time = #{deliveryTime}
             </if>
+            <if test="handleUserId != null">
+                handle_user_id = #{handleUserId}
+            </if>
+
         </set>
         where id=#{id};
     </update>
@@ -132,5 +136,28 @@
         group by name
         order by number desc
         limit 0, 10
+    </select>
+
+
+    <!-- 员工绩效统计（创新点3） -->
+    <select id="getEmployeePerformance" resultType="java.util.Map">
+        SELECT
+        e.id AS employeeId,
+        e.name AS employeeName,
+        COUNT(o.id) AS totalOrders,
+        SUM(CASE WHEN o.status = 5 THEN 1 ELSE 0 END) AS completedOrders,
+        SUM(CASE WHEN o.status = 6 THEN 1 ELSE 0 END) AS cancelledOrders,
+        SUM(o.amount) AS totalAmount
+        FROM orders o
+        INNER JOIN employee e ON o.handle_user_id = e.id
+        WHERE o.handle_user_id IS NOT NULL
+        <if test="begin != null">
+            AND o.order_time &gt;= #{begin}
+        </if>
+        <if test="end != null">
+            AND o.order_time &lt;= #{end}
+        </if>
+        GROUP BY e.id, e.name
+        ORDER BY totalOrders DESC
     </select>
 </mapper>

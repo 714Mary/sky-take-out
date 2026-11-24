@@ -8,6 +8,9 @@ import com.sky.vo.UserReportVO;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 
+import com.sky.vo.EmployeePerformanceVO;
+import java.util.List;
+
 public interface ReportService {
     /**
      * 根据时间区间统计营业额
@@ -46,4 +49,11 @@ public interface ReportService {
      * @param response
      **/
     void exportBusinessData(HttpServletResponse response);
+
+
+        /**
+     * 员工绩效统计（创新点3）
+     */
+    List<EmployeePerformanceVO> getEmployeePerformance(LocalDate begin, LocalDate end);
+
 }

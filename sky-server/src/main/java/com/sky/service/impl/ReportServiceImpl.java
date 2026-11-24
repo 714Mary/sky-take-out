@@ -29,6 +29,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
+import com.sky.vo.EmployeePerformanceVO;
+import java.math.BigDecimal;
+
 @Service
 @Slf4j
 public class ReportServiceImpl implements ReportService {
@@ -279,4 +283,25 @@ public class ReportServiceImpl implements ReportService {
         map.put("end", endTime);
         return userMapper.countByMap(map);
     }
+
+    /**
+     * 员工绩效统计（创新点3）
+     */
+    @Override
+    public List<EmployeePerformanceVO> getEmployeePerformance(LocalDate begin, LocalDate end) {
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);
+
+        List<Map<String, Object>> list = orderMapper.getEmployeePerformance(beginTime, endTime);
+
+        return list.stream().map(map -> EmployeePerformanceVO.builder()
+                .employeeId((Long) map.get("employeeId"))
+                .employeeName((String) map.get("employeeName"))
+                .totalOrders(((Number) map.get("totalOrders")).intValue())
+                .completedOrders(((Number) map.get("completedOrders")).intValue())
+                .cancelledOrders(((Number) map.get("cancelledOrders")).intValue())
+                .totalAmount((BigDecimal) map.get("totalAmount"))
+                .build()).collect(Collectors.toList());
+    }
+
 }

@@ -81,4 +81,10 @@ public interface OrderMapper {
      * @param end
      */
     List<GoodsSalesDTO> getSalesTop10(LocalDateTime begin, LocalDateTime end);
+
+    /**
+     * 根据时间区间统计员工绩效（创新点3）
+     */
+    List<Map<String, Object>> getEmployeePerformance(LocalDateTime begin, LocalDateTime end);
+
 }
